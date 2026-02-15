@@ -1,0 +1,27 @@
+=== USERS ===
+User: admin | Role: ADMIN | Company: Demo Corp (ID: 4)
+User: manager | Role: ADMIN | Company: Demo Corp (ID: 4)
+User: testadmin | Role: ADMIN | Company: Test Corp (ID: 5)
+User: settings_admin | Role: ADMIN | Company: Settings Corp (ID: 6)
+User: settings_emp | Role: ADMIN | Company: Settings Corp (ID: 6)
+User: settings_su | Role: ADMIN | Company: None (ID: None)
+User: fix_su | Role: ADMIN | Company: Admin Company (ID: 7)
+
+=== COMPANIES ===
+ID: 1 | Name: Acme Corp
+ID: 2 | Name: Globex
+ID: 3 | Name: TechStart
+ID: 4 | Name: Demo Corp
+ID: 5 | Name: Test Corp
+ID: 6 | Name: Settings Corp
+ID: 7 | Name: Admin Company
+
+=== EMPLOYEES ===
+Emp ID: 1 | Name: Alice Smith | Email: alice@acme.com | Company: Acme Corp (ID: 1)
+Emp ID: 2 | Name: Bob Builder | Email: bob@techstart.io | Company: TechStart (ID: 3)
+Emp ID: 3 | Name: Alice Test | Email: alice_test@demo.com | Company: Demo Corp (ID: 4)
+Emp ID: 4 | Name: Bob Builder | Email: bob_test@demo.com | Company: Demo Corp (ID: 4)
+Emp ID: 5 | Name: Charlie Day | Email: charlie_test@demo.com | Company: Demo Corp (ID: 4)
+Emp ID: 6 | Name: Samuel López | Email: alejandrolopezb2019@gmail.com | Company: Demo Corp (ID: 4)
+Emp ID: 7 | Name: Overtime Tester | Email: overtime.test@test.com | Company: Test Corp (ID: 5)
+Emp ID: 8 | Name: Samuel López | Email: goivan25r@gmail.com | Company: Demo Corp (ID: 4)

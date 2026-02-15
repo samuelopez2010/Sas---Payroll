@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}StaffCore{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                StaffCore
+            </h2>
+        </div>
+
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                    <div class="p-4 mb-2 rounded-md {% if message.tags == 'error' %}bg-red-50 text-red-700{% elif message.tags == 'success' %}bg-green-50 text-green-700{% else %}bg-blue-50 text-blue-700{% endif %}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

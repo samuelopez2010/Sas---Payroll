@@ -1,0 +1,47 @@
+
+<tr id="payslip-row-{{ payslip.id }}">
+    <td class="px-6 py-4 whitespace-nowrap">
+        <div class="flex items-center">
+            <div class="flex-shrink-0 h-10 w-10">
+                {% if payslip.employee.profile_image %}
+                <img class="h-10 w-10 rounded-full" src="{{ payslip.employee.profile_image.url }}" alt="">
+                {% else %}
+                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold">
+                    {{ payslip.employee.first_name.0 }}{{ payslip.employee.last_name.0 }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="ml-4">
+                <div class="text-sm font-medium text-gray-900">{{ payslip.employee.first_name }} {{ payslip.employee.last_name }}</div>
+                <div class="text-sm text-gray-500">{{ payslip.employee.position.title }}</div>
+            </div>
+        </div>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+        ${{ payslip.gross_pay }}
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+        <input type="number" 
+               name="bonus" 
+               value="{{ payslip.bonus }}" 
+               class="w-24 text-right border-gray-300 rounded-md focus:ring-primary focus:border-primary sm:text-sm"
+               hx-post="{% url 'update_payslip_bonus' payslip.id %}"
+               hx-trigger="change delay:500ms"
+               hx-target="#payslip-row-{{ payslip.id }}"
+               hx-swap="outerHTML">
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-red-500">
+        -${{ payslip.total_deductions }}
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold text-gray-900">
+        ${{ payslip.net_pay }}
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+        <button class="text-primary hover:text-blue-900"
+                hx-get="{% url 'load_payslip_modal' payslip.id %}"
+                hx-target="#modal-container"
+                hx-toggle="modal">
+            View
+        </button>
+    </td>
+</tr>

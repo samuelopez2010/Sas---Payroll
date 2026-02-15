@@ -1,0 +1,58 @@
+--- Debugging Employee Visibility ---
+Total Companies: 8
+ - Acme Corp (ID: 1)
+ - Globex (ID: 2)
+ - TechStart (ID: 3)
+ - Demo Corp (ID: 4)
+ - Test Corp (ID: 5)
+ - Settings Corp (ID: 6)
+ - Admin Company (ID: 7)
+ - nexus (ID: 8)
+
+Total Users: 8
+ - admin (ID: 1) -> Company: Demo Corp
+ - manager (ID: 2) -> Company: Demo Corp
+ - testadmin (ID: 3) -> Company: Test Corp
+ - settings_admin (ID: 4) -> Company: Settings Corp
+ - settings_emp (ID: 5) -> Company: Settings Corp
+ - settings_su (ID: 6) -> Company: None
+ - fix_su (ID: 7) -> Company: Admin Company
+ - samuelopez (ID: 8) -> Company: nexus
+
+--- Orphaned Employees (No Company) ---
+Count: 0
+
+--- Employees by Company Context ---
+
+Context: Acme Corp
+Employees visible: 1
+ - Alice Smith (ID: 1)
+
+Context: Globex
+Employees visible: 0
+
+Context: TechStart
+Employees visible: 1
+ - Bob Builder (ID: 2)
+
+Context: Demo Corp
+Employees visible: 5
+ - Alice Test (ID: 3)
+ - Bob Builder (ID: 4)
+ - Charlie Day (ID: 5)
+ - Samuel López (ID: 6)
+ - Samuel López (ID: 8)
+
+Context: Test Corp
+Employees visible: 1
+ - Overtime Tester (ID: 7)
+
+Context: Settings Corp
+Employees visible: 0
+
+Context: Admin Company
+Employees visible: 0
+
+Context: nexus
+Employees visible: 1
+ - Samuel López (ID: 9)

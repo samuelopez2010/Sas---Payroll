@@ -1,0 +1,41 @@
+
+{% extends 'base.html' %}
+{% block title %}Salary Rules - StaffCore{% endblock %}
+{% block content %}
+<div class="space-y-6">
+    <div class="sm:flex sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Salary Rules</h1>
+            <p class="mt-1 text-sm text-gray-500">Manage allowances and deductions.</p>
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <a href="{% url 'salary_rule_add' %}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 sm:w-auto">
+                Add Rule
+            </a>
+        </div>
+    </div>
+    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+        <ul class="divide-y divide-gray-200">
+            {% for rule in rules %}
+            <li>
+                <div class="px-4 py-4 sm:px-6 flex items-center justify-between">
+                    <div>
+                        <div class="text-sm font-medium text-indigo-600">{{ rule.name }}</div>
+                        <div class="text-xs text-gray-500">{{ rule.get_rule_type_display }}</div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-700">
+                            {% if rule.amount %}${{ rule.amount }}{% else %}{{ rule.percentage }}%{% endif %}
+                        </span>
+                        <a href="{% url 'salary_rule_edit' rule.pk %}" class="text-gray-400 hover:text-gray-500">Edit</a>
+                        <a href="{% url 'salary_rule_delete' rule.pk %}" class="text-red-400 hover:text-red-500">Delete</a>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+             <li><div class="px-4 py-4 sm:px-6 text-center text-gray-500">No rules found.</div></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

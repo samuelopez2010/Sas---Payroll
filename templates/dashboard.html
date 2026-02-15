@@ -1,0 +1,107 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Payroll Dashboard - StaffCore{% endblock %}
+
+{% block content %}
+<div class="mb-8 flex justify-between items-end">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">Payroll Dashboard</h1>
+        <p class="text-gray-500">Overview for {{ period }}</p>
+    </div>
+    <div class="flex gap-3">
+         <button hx-post="{% url 'process_payroll' %}" hx-swap="none" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm">
+            Run Payroll
+        </button>
+    </div>
+</div>
+
+<!-- Bento Box Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+    <!-- Timeclock Widget -->
+    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm md:col-span-3 flex items-center justify-between">
+        <div>
+            <h3 class="text-lg font-semibold text-gray-800">Digital Timeclock</h3>
+            <p class="text-sm text-gray-500">
+                {% if active_attendance %}
+                    Checked in at {{ active_attendance.check_in|time:"H:i" }}
+                {% else %}
+                    Not checked in.
+                {% endif %}
+            </p>
+        </div>
+        <div>
+            {% if active_attendance %}
+                <form action="{% url 'clock_out' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-50 text-red-600 px-6 py-2 rounded-lg font-medium hover:bg-red-100 transition-colors border border-red-200">
+                        Clock Out
+                    </button>
+                </form>
+            {% else %}
+                <form action="{% url 'clock_in' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-green-50 text-green-600 px-6 py-2 rounded-lg font-medium hover:bg-green-100 transition-colors border border-green-200">
+                        Clock In
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Widget 1: Total Cost -->
+    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <svg class="h-24 w-24 text-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"/></svg>
+        </div>
+        <p class="text-sm font-medium text-gray-500 mb-1">Total Payroll Cost</p>
+        <h3 class="text-3xl font-bold text-gray-900" id="total-payroll-cost">${{ total_cost|floatformat:2 }}</h3>
+        <!-- Comparison badge removed until we have historical data logic -->
+    </div>
+
+    <!-- Widget 2: Employee Count -->
+    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <p class="text-sm font-medium text-gray-500 mb-1">Active Employees</p>
+        <h3 class="text-3xl font-bold text-gray-900">{{ active_employees }}</h3>
+        <p class="text-sm text-gray-400 mt-2">{{ department_count }} Departments</p>
+    </div>
+
+    <!-- Widget 3: Burn Rate Chart -->
+    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm md:row-span-2">
+        <p class="text-sm font-medium text-gray-500 mb-4">Payroll Burn-rate</p>
+        <div id="chart"></div>
+    </div>
+
+    <!-- Widget 4: Quick Actions (Placeholder) -->
+    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm md:col-span-2">
+         <h4 class="font-bold text-gray-900 mb-4">Quick Actions</h4>
+         <div class="flex gap-4">
+             <a href="{% url 'employee_list' %}" class="flex-1 bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                 <p class="text-gray-800 font-medium">+ Add Employee</p>
+             </a>
+             <button hx-post="{% url 'process_payroll' %}" hx-swap="none" class="flex-1 bg-blue-50 p-4 rounded-lg border border-blue-100 hover:bg-blue-100 transition-colors text-left">
+                 <p class="text-blue-800 font-medium">Run Payroll</p>
+             </button>
+         </div>
+    </div>
+</div>
+
+<script>
+    var options = {
+        series: [{
+            name: "Payroll Cost",
+            data: {{ chart_values|safe }}
+        }],
+        chart: { type: 'area', height: 250, toolbar: { show: false } },
+        colors: ['#3b82f6'],
+        fill: { type: 'gradient', gradient: { opacityFrom: 0.6, opacityTo: 0.1 } },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth', width: 2 },
+        xaxis: { categories: {{ chart_dates|safe }} }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+</script>
+{% endblock %}

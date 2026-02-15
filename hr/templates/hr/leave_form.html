@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+{% block title %}Request Leave - StaffCore{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white shadow sm:rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Submit Leave Request
+        </h3>
+        <form method="post" class="mt-5 space-y-6">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="flex justify-end">
+                <a href="{% url 'leave_list' %}" class="mr-2 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</a>
+                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Submit Request</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,117 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if form.instance.pk %}Edit Employee{% else %}Add Employee{% endif %} - StaffCore
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+            <div class="px-4 sm:px-0">
+                <h3 class="text-lg font-medium leading-6 text-gray-900">Personal Information</h3>
+                <p class="mt-1 text-sm text-gray-600">
+                    This information will be displayed publicly (internally) so be careful what you share.
+                </p>
+            </div>
+        </div>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="shadow sm:rounded-md sm:overflow-hidden">
+                    <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                        
+                        <div class="grid grid-cols-6 gap-6">
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700">First Name</label>
+                                {{ form.first_name }}
+                                {{ form.first_name.errors }}
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700">Last Name</label>
+                                {{ form.last_name }}
+                                {{ form.last_name.errors }}
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">Email address</label>
+                                {{ form.email }}
+                                {{ form.email.errors }}
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="{{ form.date_of_birth.id_for_label }}" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                                {{ form.date_of_birth }}
+                                {{ form.date_of_birth.errors }}
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-200 pt-4">
+                            <h4 class="text-sm font-medium text-gray-900 mb-4">Job Details</h4>
+                            <div class="grid grid-cols-6 gap-6">
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="{{ form.department.id_for_label }}" class="block text-sm font-medium text-gray-700">Department</label>
+                                    {{ form.department }}
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="{{ form.position.id_for_label }}" class="block text-sm font-medium text-gray-700">Position</label>
+                                    {{ form.position }}
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="{{ form.hire_date.id_for_label }}" class="block text-sm font-medium text-gray-700">Hire Date</label>
+                                    {{ form.hire_date }}
+                                </div>
+                                
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="{{ form.contract_type.id_for_label }}" class="block text-sm font-medium text-gray-700">Contract Type</label>
+                                    {{ form.contract_type }}
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="{{ form.salary.id_for_label }}" class="block text-sm font-medium text-gray-700">Salary</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-gray-500 sm:text-sm">$</span>
+                                        </div>
+                                        {{ form.salary }}
+                                    </div>
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="{{ form.bank_account.id_for_label }}" class="block text-sm font-medium text-gray-700">Bank Account</label>
+                                    {{ form.bank_account }}
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="border-t border-gray-200 pt-4">
+                             <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    {{ form.is_active }}
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="{{ form.is_active.id_for_label }}" class="font-medium text-gray-700">Active Employee</label>
+                                    <p class="text-gray-500">Uncheck this if the employee has left the company.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                        <a href="{% url 'employee_list' %}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2">
+                            Cancel
+                        </a>
+                        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

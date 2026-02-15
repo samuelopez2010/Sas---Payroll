@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payslip - {{ payslip.employee }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #333;
+            line-height: 1.5;
+            font-size: 12px;
+        }
+        .header {
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a56db;
+        }
+        .document-title {
+            font-size: 18px;
+            text-transform: uppercase;
+            color: #6b7280;
+        }
+        .grid {
+            display: table;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .col {
+            display: table-cell;
+            width: 50%;
+            vertical-align: top;
+        }
+        .label {
+            font-weight: bold;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        .value {
+            margin-bottom: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th {
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 10px;
+            background-color: #f9fafb;
+            text-transform: uppercase;
+            font-size: 10px;
+            color: #6b7280;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .total-row td {
+            font-weight: bold;
+            border-top: 2px solid #e5e7eb;
+            border-bottom: none;
+        }
+        .net-pay-section {
+            background-color: #eff6ff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: right;
+            border: 1px solid #dbeafe;
+        }
+        .net-pay-label {
+            font-size: 14px;
+            color: #1a56db;
+            margin-bottom: 5px;
+        }
+        .net-pay-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e40af;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 10px;
+            color: #9ca3af;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            {% if payslip.employee.company.logo %}
+                <img src="{{ payslip.employee.company.logo.url }}" style="height: 50px; margin-bottom: 10px;">
+            {% else %}
+                <div class="company-name">{{ payslip.employee.company.name|default:"StaffCore Inc." }}</div>
+            {% endif %}
+            <div>Minicentro El marqués, Caracas</div>
+        </div>
+        <div class="document-title">Payslip</div>
+    </div>
+
+    <div class="grid">
+        <div class="col">
+            <div class="label">Employee</div>
+            <div class="value">
+                <strong>{{ payslip.employee.first_name }} {{ payslip.employee.last_name }}</strong><br>
+                {{ payslip.employee.position.title|default:"Employee" }}<br>
+                {{ payslip.employee.email }}
+            </div>
+        </div>
+        <div class="col" style="text-align: right;">
+            <div class="label">Period</div>
+            <div class="value">{{ payslip.period.start_date }} - {{ payslip.period.end_date }}</div>
+            
+            <div class="label">Pay Date</div>
+            <div class="value">{{ payslip.generated_at|date:"M d, Y" }}</div>
+
+            <div class="label">Payslip ID</div>
+            <div class="value">#{{ payslip.id }}</div>
+        </div>
+    </div>
+
+    <!-- Earnings Model/Context doesn't strictly break down earnings vs deductions in separate lists yet, 
+         but we have gross_pay. For MVP, we'll show Base Salary + Bonus as Earnings, 
+         and Tax/Deductions as Deductions. -->
+    
+    <h3>Earnings</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th style="text-align: right;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Base Salary (Period Adjusted)</td>
+                <td style="text-align: right;">{{ payslip.gross_pay|floatformat:2 }}</td>
+            </tr>
+            {% if payslip.overtime_pay > 0 %}
+            <tr>
+                <td>Overtime ({{ payslip.overtime_hours|floatformat:1 }} hrs @ 1.5x)</td>
+                <td style="text-align: right;">{{ payslip.overtime_pay|floatformat:2 }}</td>
+            </tr>
+            {% endif %}
+            {% if payslip.bonus > 0 %}
+            <tr>
+                <td>Bonus / Commission</td>
+                <td style="text-align: right;">{{ payslip.bonus|floatformat:2 }}</td>
+            </tr>
+            {% endif %}
+            <tr class="total-row">
+                <td>Total Gross Pay</td>
+                <td style="text-align: right;">{{ payslip.gross_pay|floatformat:2 }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Deductions</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th style="text-align: right;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Income Tax (ISLR)</td>
+                <td style="text-align: right;">{{ payslip.tax_deduction|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td>Other Deductions</td>
+                <td style="text-align: right;">{{ payslip.other_deductions|floatformat:2 }}</td>
+            </tr>
+            <tr class="total-row">
+                <td>Total Deductions</td>
+                <td style="text-align: right;">{{ payslip.total_deductions|floatformat:2 }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="net-pay-section">
+        <div class="net-pay-label">Net Pay</div>
+        <div class="net-pay-value">${{ payslip.net_pay|floatformat:2 }}</div>
+    </div>
+
+    <div class="footer">
+        <p>This is a computer-generated document and needs no signature.</p>
+        <p>Generated by StaffCore HRIS</p>
+    </div>
+
+</body>
+</html>
